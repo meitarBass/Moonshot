@@ -30,14 +30,25 @@ struct ContentView: View {
 //                .frame(width: geo.size.width, height: geo.size.height)
 //        }
         
-        ScrollView {
-            LazyVStack(spacing: 10) {
-                ForEach(0..<100) {
-                    CustomText("Item \($0)")
-                        .font(.title)
+//        ScrollView {
+//            LazyVStack(spacing: 10) {
+//                ForEach(0..<100) {
+//                    CustomText("Item \($0)")
+//                        .font(.title)
+//                }
+//            }
+//            .frame(maxWidth: .infinity)
+//        }
+        
+        NavigationView {
+            List(0..<100) { row in
+                NavigationLink {
+                    Text("Detail \(row)")
+                } label: {
+                    Text("Row \(row)")
                 }
             }
-            .frame(maxWidth: .infinity)
+            .navigationTitle("SwiftUI")
         }
     }
 }
