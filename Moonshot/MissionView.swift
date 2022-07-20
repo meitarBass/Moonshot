@@ -17,27 +17,15 @@ struct MissionView_Previews: PreviewProvider {
     }
 }
 
-struct MissionView: View {
-    struct CrewMember {
-        let role: String
-        let astronaut: Astronaut
-    }
-    
-    let crew: [CrewMember]
+struct CrewMember {
+    let role: String
+    let astronaut: Astronaut
+}
+
+struct horizontalMissionScrollView: View {
     let mission: Mission
+    let crew: [CrewMember]
     
-    init(mission: Mission, astronauts: [String: Astronaut]) {
-        self.mission = mission
-
-        self.crew = mission.crew.map { member in
-            if let astronaut = astronauts[member.name] {
-                return CrewMember(role: member.role, astronaut: astronaut)
-            } else {
-                fatalError("Missing \(member.name)")
-            }
-        }
-    }
-
     var body: some View {
         GeometryReader { geometry in
             ScrollView {
@@ -47,7 +35,9 @@ struct MissionView: View {
                         .scaledToFit()
                         .frame(maxWidth: geometry.size.width * 0.6)
                         .padding(.top)
-
+                    
+                    Text(mission.formattedLaunchDate)
+                        
                     VStack(alignment: .leading) {
                         Rectangle()
                             .frame(height: 2)
@@ -101,8 +91,30 @@ struct MissionView: View {
                 .padding(.bottom)
             }
         }
+    }
+}
+
+struct MissionView: View {
+    
+    let crew: [CrewMember]
+    let mission: Mission
+    
+    init(mission: Mission, astronauts: [String: Astronaut]) {
+        self.mission = mission
+
+        self.crew = mission.crew.map { member in
+            if let astronaut = astronauts[member.name] {
+                return CrewMember(role: member.role, astronaut: astronaut)
+            } else {
+                fatalError("Missing \(member.name)")
+            }
+        }
+    }
+
+    var body: some View {
+        horizontalMissionScrollView(mission: mission, crew: crew)
         .navigationTitle(mission.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .background(.darkBackground)
+        }
     }
-}
